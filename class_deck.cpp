@@ -29,7 +29,15 @@ namespace cards{
   
   void deck::shuffle(){
     std::srand(time(NULL));
-    std::random_shuffle(cards.begin(), cards.end());
+    //std::random_shuffle(cards.begin(), cards.end());
+    int temp, index;
+    for(int i = 0; i < cards.size(); i++){
+      index = (rand() * (cards.size() - i)) + i;
+      temp = numbers[i];
+      numbers[i] = numbers[index];
+      numbers[index] = temp;
+    }
+
   }
   
   
