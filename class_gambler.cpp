@@ -3,17 +3,18 @@
 
 namespace casino{
 
+  blackjackStrategy blackjackStrat(TERMINAL);
+  int gambler::gamblerNr=1;
+
   gambler::gambler(std::string fname, std::string lname){
-    gamblerId = 1;
+    gamblerId = gamblerNr++;
     firstName = fname;
     lastName = lname;
     readyToPlay = true;
   }
 
   gambler::gambler(controlType c){
-    blackjackStrategy b = blackjackStrategy(c);
-    strategy* s = &b;
-    strategies.push_back(s);
+     strategies.push_back(&blackjackStrat);
   }
 
   void gambler::giveMoney(cash amount){
@@ -21,8 +22,13 @@ namespace casino{
   }
 
   cash gambler::placeBet(){
-    wallet -= 100;
-    return 100;
+    if(wallet >= 100)
+    {
+      wallet -= 100;
+      return 100;
+    }
+    else
+      return 0;
   }
 
   std::string gambler::name(){
@@ -34,7 +40,7 @@ namespace casino{
   }
 
   action* gambler::takeAction(gameState* g){
-    return strategies[0]->takeAction(g);
+    return strategies.front()->takeAction(g);
   }
 
   void gambler::joinGame(game& g){

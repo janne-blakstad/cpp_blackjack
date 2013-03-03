@@ -1,6 +1,8 @@
 #ifndef CLASS_BLACKJACKGAME_H
 #define CLASS_BLACKJACKGAME_H
 #include "class_game.h"
+#include "class_deck.h"
+
 namespace casino{
   
   class blackjackGame : public game
@@ -18,7 +20,7 @@ namespace casino{
 	
 	int cardPoints(cards::t_rank cardRank);
 	
-	void resolveDealersHand();
+	void resolveDealersHand(cards::deck d);
 	
 	int countPoints(std::vector<cards::card> hand);
 	

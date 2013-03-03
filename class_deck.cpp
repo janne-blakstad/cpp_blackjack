@@ -30,12 +30,12 @@ namespace cards{
   void deck::shuffle(){
     std::srand(time(NULL));
     //std::random_shuffle(cards.begin(), cards.end());
-    int temp, index;
+    int index;
     for(int i = 0; i < cards.size(); i++){
-      index = (rand() * (cards.size() - i)) + i;
-      temp = numbers[i];
-      numbers[i] = numbers[index];
-      numbers[index] = temp;
+      index = rand() % cards.size();
+      card temp = cards[i];
+      cards[i] = cards[index];
+      cards[index] = temp;
     }
 
   }

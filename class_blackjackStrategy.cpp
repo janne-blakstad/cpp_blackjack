@@ -7,9 +7,9 @@ namespace casino
   action* blackjackStrategy::takeAction(gameState* g){
     g->print();
 
-    blackjackAction b(TERMINAL);
-    action* a = &b;
-    return a;
+    blackjackAction* b = new blackjackAction(TERMINAL);
+
+    return b;
   }
 
   blackjackStrategy::blackjackStrategy(controlType){

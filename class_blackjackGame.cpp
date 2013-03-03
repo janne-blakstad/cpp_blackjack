@@ -1,77 +1,139 @@
 #include "class_blackjackGame.h"
 #include <iostream>
-#include "class_deck.h"
+//#include "class_deck.h"
 #include <vector>
+#include "class_blackjackAction.h"
+#include "class_blackjackState.h"
+#include "class_blackjackStrategy.h" //temp
 
 namespace casino{
  
-    std::vector<cards::card> playersHand;
-    std::vector<cards::card> dealersHand;
-    cards::deck d;
- 
-  void blackjackGame::playRound(){
-    d.shuffle();
+    int dealer;
+    int hero;
+    std::vector<std::vector<cards::card> > cardsDealt;
 
-    playersHand.push_back(d.deal());
-    playersHand.push_back(d.deal());
-    printHand(playersHand);
-    if(countPoints(playersHand) == 21){
+  void blackjackGame::playRound(){
+    cards::deck d;
+
+    cash bet = gamblers[hero].placeBet();
+
+    if(bet == 0)
+    {
+      std::cout << "Wallet fund too low" << std::endl;
+      return;
+    }
+
+    d.shuffle();
+    cardsDealt[dealer].push_back(d.deal());
+
+    cardsDealt[hero].push_back(d.deal());
+    cardsDealt[hero].push_back(d.deal());
+    std::cout << "Your hand: ";
+    printHand(cardsDealt[hero]);
+
+    if(countPoints(cardsDealt[hero]) == 21){
       std::cout << "Blackjack!" << std::endl;
+      gamblers[hero].giveMoney(bet*2.5);
+      std::cout << "Won " << bet*1.5 << " cash" << std::endl;
     }
     else{
-      dealersHand.push_back(d.deal());
-      dealersHand.push_back(d.deal());
+      cardsDealt[dealer].push_back(d.deal());
+      cardsDealt[dealer].push_back(d.deal());
       printDealersHand();
 
-      std::string action;
+      //std::string action;
 
-      std::cout << "HIT or STAND?" << std::endl;
-      std::cin >> action;
+      //std::cout << "HIT or STAND?" << std::endl;
+      //std::cin >> action;
 
-      while(action == "HIT"){
-        playersHand.push_back(d.deal());
-        printHand(playersHand);
+      blackjackState bjState = blackjackState(cardsDealt, hero, dealer);
+      //gameState* state = &bjState;
 
-        if(countPoints(playersHand) > 21) break;
+      blackjackStrategy bStrat(TERMINAL);
 
-        dealersHand.push_back(d.deal());
+      //blackjackAction* a = (blackjackAction*) gamblers[hero].takeAction(&bjState);
+      //delete a;
+
+      //blackjackAction bjAction = (blackjackAction) *a;
+
+/*      while(bjAction.getAtype() == blackjackAction::HIT){
+        cardsDealt[hero].push_back(d.deal());
+        printHand(cardsDealt[hero]);
+
+        if(countPoints(cardsDealt[hero]) > 21) break;
+
+        cardsDealt[dealer].push_back(d.deal());
         printDealersHand();
 
-        if(countPoints(dealersHand) > 21) break;
+        if(countPoints(cardsDealt[dealer]) > 21) break;
 
-        std::cout << "HIT or STAND?" << std::endl;
-        std::cin >> action;
-      }
+        delete bjState;
 
-      int playerPoints = countPoints(playersHand);
+        bjState = blackjackState(cardsDealt, hero, dealer);
+        bjAction = (blackjackAction*) gamblers[hero].takeAction(&bjState);
+
+        //std::cout << "HIT or STAND?" << std::endl;
+        //std::cin >> action;
+     }
+*/
+      int playerPoints = countPoints(cardsDealt[hero]);
       std::cout << "You got " << playerPoints << " points" << std::endl;
 
       if(playerPoints > 21)
         std::cout << "You lost." << std::endl;
       else{
-        resolveDealersHand();
+        resolveDealersHand(d);
 
-        int dealerPoints = countPoints(dealersHand);
+        int dealerPoints = countPoints(cardsDealt[dealer]);
 
-        printHand(dealersHand);
+        printHand(cardsDealt[dealer]);
 
-        if(dealerPoints > 21)
+        if(dealerPoints > 21){
           std::cout << "Bust, you won" << std::endl;
-        else if(playerPoints > dealerPoints)
+          gamblers[hero].giveMoney(bet*2);
+          std::cout << "Won " << bet << " cash" << std::endl;
+        }
+        else if(playerPoints > dealerPoints){
           std::cout << "You won!" << std::endl;
-        else if(playerPoints < dealerPoints)
+          gamblers[hero].giveMoney(bet*2);
+          std::cout << "Won " << bet << " cash" << std::endl;
+        }
+        else if(playerPoints < dealerPoints){
           std::cout << "You lost.." << std::endl;
-        else
+          std::cout << "Lost " << bet << " cash" << std::endl;
+        }
+        else{
           std::cout << "Push, it's a draw" << std::endl;
+          gamblers[hero].giveMoney(bet);
+          std::cout << "Got " << bet << " cash back" << std::endl;
+        }
       }
-
     }
 
-    playersHand.clear();
-    dealersHand.clear();
+    cardsDealt[hero].clear();
+    cardsDealt[dealer].clear();
   }
 
   blackjackGame::blackjackGame(int players): game::game(blackjack, players){  
+    gamblers.push_back(gambler());
+
+    for(int i = 0; i <= players; i++)
+    {
+      std::vector<cards::card> v;
+      cardsDealt.push_back(v);
+    }
+
+    dealer = 0;
+    hero = 1;
+
+    gamblers[hero].giveMoney(1000);
+/*
+    std::vector<cards::card> dealercards;
+    cardsDealt[dealer] = dealercards;
+
+    std::vector<cards::card> herocards;
+    cardsDealt[hero] = herocards;
+*/
   }
 
   void blackjackGame::start(){
@@ -104,17 +166,18 @@ namespace casino{
     }
   }
 
-  void blackjackGame::resolveDealersHand(){
-    int dealerPoints = countPoints(dealersHand);
+  void blackjackGame::resolveDealersHand(cards::deck d){
+    int dealerPoints = countPoints(cardsDealt[dealer]);
 
     while(dealerPoints < 17){
       std::cout << "Dealer: " << dealerPoints << " points" << std::endl;
       std::cout << "Dealer: HIT" << std::endl;
-      dealersHand.push_back(d.deal());
-      dealerPoints = countPoints(dealersHand);
+      cardsDealt[dealer].push_back(d.deal());
+      dealerPoints = countPoints(cardsDealt[dealer]);
     }
     std::cout << "Dealer: " << dealerPoints << " points" << std::endl;
-    std::cout << "Dealer: STAND" << std::endl;
+    if(dealerPoints <= 21)
+      std::cout << "Dealer: STAND" << std::endl;
   }
 
   int blackjackGame::countPoints(std::vector<cards::card> hand){
@@ -140,7 +203,6 @@ namespace casino{
   }
 
   void blackjackGame::printHand(std::vector<cards::card> hand){
-    std::cout << "Your cards: ";
     for(std::vector<cards::card>::iterator it = hand.begin() ; it != hand.end(); ++it){
       std::cout << it->name() << " ";
     }
@@ -149,9 +211,9 @@ namespace casino{
 
   void blackjackGame::printDealersHand(){
     std::cout << "Dealers cards: ";
-    std::vector<cards::card>::iterator it = dealersHand.begin();
+    std::vector<cards::card>::iterator it = cardsDealt[dealer].begin();
     it++;
-    for(it; it != dealersHand.end(); ++it){
+    for(it; it != cardsDealt[dealer].end(); ++it){
       std::cout << it->name() << " ";
     }
     std::cout << std::endl;
