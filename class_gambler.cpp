@@ -5,6 +5,7 @@
 namespace casino{
 
   int gambler::gamblerNr=1;
+    blackjackStrategy* blackjackStrat = new blackjackStrategy(TERMINAL);
 
   gambler::gambler(std::string fname, std::string lname){
     gamblerId = gamblerNr++;
@@ -15,8 +16,7 @@ namespace casino{
 
   gambler::gambler(controlType c){
     gamblerId = gamblerNr++;
-    blackjackStrategy blackjackStrat = new blackjackStrategy(TERMINAL);
-    strategies.push_back(&blackjackStrat);
+    strategies.push_back(blackjackStrat);
     std::cout << "Skriv inn fornavn:" << std::endl;
     std::cin >> firstName;
     std::cout << "Skriv inn etternavn:" << std::endl;
@@ -47,7 +47,9 @@ namespace casino{
   }
 
   action* gambler::takeAction(gameState* g){
-    return strategies.front()->takeAction(g);
+    return blackjackStrat->takeAction(g);
+    //blackjackStrategy* bjs = strategies.front();
+    //return strategies.front()->takeAction(g);
   }
 
   void gambler::joinGame(game& g){

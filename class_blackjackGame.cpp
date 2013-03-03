@@ -49,14 +49,14 @@ namespace casino{
       blackjackState bjState = blackjackState(cardsDealt, hero, dealer);
       //gameState* state = &bjState;
 
-      blackjackStrategy bStrat(TERMINAL);
+      //blackjackStrategy bStrat(TERMINAL);
 
-      //blackjackAction* a = (blackjackAction*) gamblers[hero].takeAction(&bjState);
+      blackjackAction* bjAction = (blackjackAction*) gamblers[hero].takeAction(&bjState);
       //delete a;
 
       //blackjackAction bjAction = (blackjackAction) *a;
 
-/*      while(bjAction.getAtype() == blackjackAction::HIT){
+      while(bjAction->getAtype() == blackjackAction::HIT){
         cardsDealt[hero].push_back(d.deal());
         printHand(cardsDealt[hero]);
 
@@ -67,7 +67,7 @@ namespace casino{
 
         if(countPoints(cardsDealt[dealer]) > 21) break;
 
-        delete bjState;
+        //delete bjState;
 
         bjState = blackjackState(cardsDealt, hero, dealer);
         bjAction = (blackjackAction*) gamblers[hero].takeAction(&bjState);
@@ -75,7 +75,7 @@ namespace casino{
         //std::cout << "HIT or STAND?" << std::endl;
         //std::cin >> action;
      }
-*/
+
       int playerPoints = countPoints(cardsDealt[hero]);
       std::cout << "You got " << playerPoints << " points" << std::endl;
 
