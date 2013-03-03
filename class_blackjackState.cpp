@@ -17,7 +17,7 @@ namespace casino
     std::cout << std::endl;
 
 
-    std::cout << "Dealers cards: ";
+    std::cout << "Dealers cards: <hidden> ";
     for(std::vector<cards::card>::iterator it = cardsDealt[dealer].begin()++ ; it !=  cardsDealt[dealer].end(); ++it){
       std::cout << it->name() << " ";
     }

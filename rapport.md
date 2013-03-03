@@ -32,9 +32,32 @@ segmentation fault.
 
 
 #Om implementasjonen
-##class_blackjackGame:
+
+###class_blackjackAction:
+Har en if-test på om kontrolltypen er terminal i konstruktøren siden det som står legger opp til terminal.
+Har lagt til at man kan skrive HIT/hit/h for hit og STAND/stand/s for stand. Optimalt sett skulle det vært en case-
+insensitiv sjekk på hit og stand.
+Bruker en boolean ok for å holde løkken som spør om kommando igang til det er skrevet noe godkjent.
+
+###class_blackjackGame:
 Jeg har valgt å ha cardsDealt, int hero og int dealer som i class_blackjackState for å enkelt kunne nå dem og 
 opprette states.
 Jeg har valgt å ha en metode for å regne ut poengsummen til en hånd. Hadde jeg hatt bedre tid hadde jeg prøvd å 
 finne en metode som ikke må iterere gjennom alle kortene hver gang, men som legger til summen etter hvert som man 
 trekker kort.
+Hvis wallet har for lite til å spille burde kanskje spillet avsluttet, men det er også ganske vanlig at man får 
+prøvd igjen, så jeg lot det være sånn.
+Kunne sikkert lagt mer av innholdet i playRound i egne metoder, men har i utgangsounktet bare gjort det for det 
+som kalles flere ganger.
+Kunne antakeligvis erstattet printHand() og printDealersHand() med metodene fra class_blackjackState.
+
+###class_blackjackStrategy
+Oppretter blackjackAction med new for at den ikke skal bli slettet når metoden er ferdig, men får som det er ikke 
+slettet den igjen. Burde isåfall hatt f.eks. en destruktor for klassen.
+
+###class_gambler
+Gjør det samme med blackjackStrategy her som med blackjackAction i blackjackStrategy.
+Har med at man må skrive inn navn på spilleren i konstruktøren for terminal, men det er egentlig litt unødvendig 
+siden det ikke brukes til noe for øyeblikket.
+Har valgt 100 som bet-amount, men dette burde kanskje kunne sendes med som argument? Man vil jo kanskje kunne 
+velge å satse mer. Returnerer 0 hvis det er under 100 i wallet.

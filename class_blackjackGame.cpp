@@ -60,6 +60,7 @@ namespace casino{
 
       if(playerPoints > 21)
         std::cout << "You lost." << std::endl;
+        std::cout << "Lost " << bet << " cash" << std::endl;
       else{
         resolveDealersHand(d);
 
@@ -179,7 +180,7 @@ namespace casino{
   }
 
   void blackjackGame::printDealersHand(){
-    std::cout << "Dealers cards: ";
+    std::cout << "Dealers cards: <hidden> ";
     std::vector<cards::card>::iterator it = cardsDealt[dealer].begin();
     it++;
     for(it; it != cardsDealt[dealer].end(); ++it){
