@@ -24,7 +24,7 @@ segmentation fault.
 
 19\. februar: Mistet det jeg hadde gjort, så lager card og deck på nytt.
 
-19.-24. februar: Prøver å begynne på de andre klassene, men sliter med å forstå dem.
+19.-24. februar: Begynner på de andre klassene, men sliter med å forstå dem. Bruker mye tid på dette.
 
 24.-27. februar: Lager et fungerende blackjack-spill i class_blackjackGame.cpp uten å bruke andre klasser enn card og deck.
 
