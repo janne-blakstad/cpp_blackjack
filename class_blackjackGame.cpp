@@ -1,16 +1,10 @@
 #include "class_blackjackGame.h"
 #include <iostream>
-//#include "class_deck.h"
 #include <vector>
 #include "class_blackjackAction.h"
 #include "class_blackjackState.h"
-#include "class_blackjackStrategy.h" //temp
 
 namespace casino{
- 
-    int dealer;
-    int hero;
-    std::vector<std::vector<cards::card> > cardsDealt;
 
   void blackjackGame::playRound(){
     cards::deck d;
@@ -41,20 +35,9 @@ namespace casino{
       cardsDealt[dealer].push_back(d.deal());
       printDealersHand();
 
-      //std::string action;
-
-      //std::cout << "HIT or STAND?" << std::endl;
-      //std::cin >> action;
-
       blackjackState bjState = blackjackState(cardsDealt, hero, dealer);
-      //gameState* state = &bjState;
-
-      //blackjackStrategy bStrat(TERMINAL);
 
       blackjackAction* bjAction = (blackjackAction*) gamblers[hero].takeAction(&bjState);
-      //delete a;
-
-      //blackjackAction bjAction = (blackjackAction) *a;
 
       while(bjAction->getAtype() == blackjackAction::HIT){
         cardsDealt[hero].push_back(d.deal());
@@ -67,13 +50,9 @@ namespace casino{
 
         if(countPoints(cardsDealt[dealer]) > 21) break;
 
-        //delete bjState;
-
         bjState = blackjackState(cardsDealt, hero, dealer);
         bjAction = (blackjackAction*) gamblers[hero].takeAction(&bjState);
 
-        //std::cout << "HIT or STAND?" << std::endl;
-        //std::cin >> action;
      }
 
       int playerPoints = countPoints(cardsDealt[hero]);
@@ -114,7 +93,7 @@ namespace casino{
     cardsDealt[dealer].clear();
   }
 
-  blackjackGame::blackjackGame(int players): game::game(blackjack, players){  
+  blackjackGame::blackjackGame(int players): game::game(blackjack, players){
     gamblers.push_back(gambler());
 
     for(int i = 0; i <= players; i++)
@@ -127,13 +106,6 @@ namespace casino{
     hero = 1;
 
     gamblers[hero].giveMoney(1000);
-/*
-    std::vector<cards::card> dealercards;
-    cardsDealt[dealer] = dealercards;
-
-    std::vector<cards::card> herocards;
-    cardsDealt[hero] = herocards;
-*/
   }
 
   void blackjackGame::start(){
@@ -197,9 +169,6 @@ namespace casino{
     }
 
     return points;
-  }
-
-  void blackjackGame::getBestHand(){ 
   }
 
   void blackjackGame::printHand(std::vector<cards::card> hand){
