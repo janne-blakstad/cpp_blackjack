@@ -14,3 +14,11 @@ jeg har implementert klassene og metodene slik det er tenkt eller ikke.
 
 Jeg har også hatt en del problemer med generell implementasjon av klasser, da det her også er en del forskjeller 
 fra hvordan det er i java.
+
+
+#Arbeidsmetode
+18. februar: Begynne på card og deck
+19. februar: Mistet det jeg hadde gjort, så lager card og deck på nytt
+19.-24. februar: Prøver å begynne på de andre klassene, men sliter med å forstå dem.
+24.-27. februar: Lager et fungerende blackjack-spill i class_blackjackGame.cpp uten å bruke andre klasser enn card og deck.
+27. februar - 3. mars: Lager og implementerer resten av klassene.
