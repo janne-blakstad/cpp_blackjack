@@ -1,9 +1,9 @@
 #include "class_gambler.h"
 #include "class_blackjackStrategy.h"
+#include <iostream>
 
 namespace casino{
 
-  blackjackStrategy blackjackStrat(TERMINAL);
   int gambler::gamblerNr=1;
 
   gambler::gambler(std::string fname, std::string lname){
@@ -14,7 +14,14 @@ namespace casino{
   }
 
   gambler::gambler(controlType c){
-     strategies.push_back(&blackjackStrat);
+    gamblerId = gamblerNr++;
+    blackjackStrategy blackjackStrat = new blackjackStrategy(TERMINAL);
+    strategies.push_back(&blackjackStrat);
+    std::cout << "Skriv inn fornavn:" << std::endl;
+    std::cin >> firstName;
+    std::cout << "Skriv inn etternavn:" << std::endl;
+    std::cin >> lastName;
+    readyToPlay = true;
   }
 
   void gambler::giveMoney(cash amount){
